@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.wsj.demo.dao.ActReModelDao">
+
+    <resultMap type="com.wsj.demo.entity.ActReModel" id="ActReModelMap">
+        <result property="id_" column="ID_" jdbcType="OTHER"/>
+        <result property="rev_" column="REV_" jdbcType="OTHER"/>
+        <result property="name_" column="NAME_" jdbcType="OTHER"/>
+        <result property="key_" column="KEY_" jdbcType="OTHER"/>
+        <result property="category_" column="CATEGORY_" jdbcType="OTHER"/>
+        <result property="createTime_" column="CREATE_TIME_" jdbcType="TIMESTAMP"/>
+        <result property="lastUpdateTime_" column="LAST_UPDATE_TIME_" jdbcType="TIMESTAMP"/>
+        <result property="version_" column="VERSION_" jdbcType="OTHER"/>
+        <result property="metaInfo_" column="META_INFO_" jdbcType="OTHER"/>
+        <result property="deploymentId_" column="DEPLOYMENT_ID_" jdbcType="OTHER"/>
+        <result property="editorSourceValueId_" column="EDITOR_SOURCE_VALUE_ID_" jdbcType="OTHER"/>
+        <result property="editorSourceExtraValueId_" column="EDITOR_SOURCE_EXTRA_VALUE_ID_" jdbcType="OTHER"/>
+        <result property="tenantId_" column="TENANT_ID_" jdbcType="OTHER"/>
+        <result property="subtype_" column="SUBTYPE_" jdbcType="OTHER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="ActReModelMap">
+        select
+          ID_, REV_, NAME_, KEY_, CATEGORY_, CREATE_TIME_, LAST_UPDATE_TIME_, VERSION_, META_INFO_, DEPLOYMENT_ID_, EDITOR_SOURCE_VALUE_ID_, EDITOR_SOURCE_EXTRA_VALUE_ID_, TENANT_ID_, SUBTYPE_
+        from RFDEV_AC.ACT_RE_MODEL
+        where ID_ = #{id_}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="ActReModelMap">
+        select
+          ID_, REV_, NAME_, KEY_, CATEGORY_, CREATE_TIME_, LAST_UPDATE_TIME_, VERSION_, META_INFO_, DEPLOYMENT_ID_, EDITOR_SOURCE_VALUE_ID_, EDITOR_SOURCE_EXTRA_VALUE_ID_, TENANT_ID_, SUBTYPE_
+        from RFDEV_AC.ACT_RE_MODEL
+        limit #{offset}, #{limit}
+    </select>
+
+    <!--通过实体作为筛选条件查询-->
+    <select id="queryAll" resultMap="ActReModelMap">
+        select
+          ID_, REV_, NAME_, KEY_, CATEGORY_, CREATE_TIME_, LAST_UPDATE_TIME_, VERSION_, META_INFO_, DEPLOYMENT_ID_, EDITOR_SOURCE_VALUE_ID_, EDITOR_SOURCE_EXTRA_VALUE_ID_, TENANT_ID_, SUBTYPE_
+        from RFDEV_AC.ACT_RE_MODEL
+        <where>
+            <if test="id_ != null">
+                and ID_ = #{id_}
+            </if>
+            <if test="rev_ != null">
+                and REV_ = #{rev_}
+            </if>
+            <if test="name_ != null">
+                and NAME_ = #{name_}
+            </if>
+            <if test="key_ != null">
+                and KEY_ = #{key_}
+            </if>
+            <if test="category_ != null">
+                and CATEGORY_ = #{category_}
+            </if>
+            <if test="createTime_ != null">
+                and CREATE_TIME_ = #{createTime_}
+            </if>
+            <if test="lastUpdateTime_ != null">
+                and LAST_UPDATE_TIME_ = #{lastUpdateTime_}
+            </if>
+            <if test="version_ != null">
+                and VERSION_ = #{version_}
+            </if>
+            <if test="metaInfo_ != null">
+                and META_INFO_ = #{metaInfo_}
+            </if>
+            <if test="deploymentId_ != null">
+                and DEPLOYMENT_ID_ = #{deploymentId_}
+            </if>
+            <if test="editorSourceValueId_ != null">
+                and EDITOR_SOURCE_VALUE_ID_ = #{editorSourceValueId_}
+            </if>
+            <if test="editorSourceExtraValueId_ != null">
+                and EDITOR_SOURCE_EXTRA_VALUE_ID_ = #{editorSourceExtraValueId_}
+            </if>
+            <if test="tenantId_ != null">
+                and TENANT_ID_ = #{tenantId_}
+            </if>
+            <if test="subtype_ != null">
+                and SUBTYPE_ = #{subtype_}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="id_" useGeneratedKeys="true">
+        insert into RFDEV_AC.ACT_RE_MODEL(REV_, NAME_, KEY_, CATEGORY_, CREATE_TIME_, LAST_UPDATE_TIME_, VERSION_, META_INFO_, DEPLOYMENT_ID_, EDITOR_SOURCE_VALUE_ID_, EDITOR_SOURCE_EXTRA_VALUE_ID_, TENANT_ID_, SUBTYPE_)
+        values (#{rev_}, #{name_}, #{key_}, #{category_}, #{createTime_}, #{lastUpdateTime_}, #{version_}, #{metaInfo_}, #{deploymentId_}, #{editorSourceValueId_}, #{editorSourceExtraValueId_}, #{tenantId_}, #{subtype_})
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update RFDEV_AC.ACT_RE_MODEL
+        <set>
+            <if test="rev_ != null">
+                REV_ = #{rev_},
+            </if>
+            <if test="name_ != null">
+                NAME_ = #{name_},
+            </if>
+            <if test="key_ != null">
+                KEY_ = #{key_},
+            </if>
+            <if test="category_ != null">
+                CATEGORY_ = #{category_},
+            </if>
+            <if test="createTime_ != null">
+                CREATE_TIME_ = #{createTime_},
+            </if>
+            <if test="lastUpdateTime_ != null">
+                LAST_UPDATE_TIME_ = #{lastUpdateTime_},
+            </if>
+            <if test="version_ != null">
+                VERSION_ = #{version_},
+            </if>
+            <if test="metaInfo_ != null">
+                META_INFO_ = #{metaInfo_},
+            </if>
+            <if test="deploymentId_ != null">
+                DEPLOYMENT_ID_ = #{deploymentId_},
+            </if>
+            <if test="editorSourceValueId_ != null">
+                EDITOR_SOURCE_VALUE_ID_ = #{editorSourceValueId_},
+            </if>
+            <if test="editorSourceExtraValueId_ != null">
+                EDITOR_SOURCE_EXTRA_VALUE_ID_ = #{editorSourceExtraValueId_},
+            </if>
+            <if test="tenantId_ != null">
+                TENANT_ID_ = #{tenantId_},
+            </if>
+            <if test="subtype_ != null">
+                SUBTYPE_ = #{subtype_},
+            </if>
+        </set>
+        where ID_ = #{id_}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete from RFDEV_AC.ACT_RE_MODEL where ID_ = #{id_}
+    </delete>
+
+</mapper>
