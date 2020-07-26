@@ -1,8 +1,8 @@
 package sql;
 
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.ProcessEngineConfiguration;
-import org.activiti.engine.ProcessEngines;
+import org.activiti.engine.*;
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricActivityInstanceQuery;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.ProcessDefinition;
@@ -86,7 +86,7 @@ public class ActivitiTest {
     public void test4() {
         //查询指派人下的任务
         TaskQuery taskQuery = pe.getTaskService().createTaskQuery();
-//        String assignee = "张三";
+//        String assignee = "张三";  指定人就是当前人下的任务，不指定人就是所有任务
 //        taskQuery.taskAssignee(assignee);
 
         taskQuery.orderByTaskCreateTime().desc();
@@ -101,13 +101,33 @@ public class ActivitiTest {
 
     @Test
     public void test5() {
-//        57502---经理审批----李四
-//55002---经理审批----李四
         //执行任务
         String taskId = "5002";
         pe.getTaskService().complete(taskId);
     }
-
-
-
+    @Test
+    public void testHistoric01(){
+        HistoryService historyService = pe.getHistoryService();
+        HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
+//        query.processInstanceId("2501");可以根据id筛选。。
+        List<HistoricActivityInstance> list = query.list();
+        for(HistoricActivityInstance ai :list){
+            System.out.println(ai.getActivityId());
+            System.out.println(ai.getActivityName());
+            System.out.println(ai.getProcessDefinitionId());
+            System.out.println(ai.getProcessInstanceId());
+            System.out.println("==============================");
+        }
+    }
+    @Test
+    public void deleteDeployment() {
+        // 流程部署id
+        String deploymentId = "1";
+        // 通过流程引擎获取repositoryService
+         RepositoryService repositoryService =pe.getRepositoryService();
+        //删除流程定义，如果该流程定义已有流程实例启动则删除时出错
+        repositoryService.deleteDeployment(deploymentId);
+        //设置true 级联删除流程定义，即使该流程有流程实例启动也可以删除，设置为false非级别删除方式，如果流程
+        // repositoryService.deleteDeployment(deploymentId, true);
+    }
 }
