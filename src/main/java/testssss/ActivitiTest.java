@@ -1,4 +1,4 @@
-package sql;
+package testssss;
 
 import org.activiti.engine.*;
 import org.activiti.engine.history.HistoricActivityInstance;
@@ -68,7 +68,7 @@ public class ActivitiTest {
         List<ProcessDefinition> list = query.list();
         for (ProcessDefinition processDefinition : list) {
 
-            System.out.println(processDefinition.getId()+"-------"+processDefinition.getName());
+            System.out.println(processDefinition.getId()+"-------"+processDefinition.getName()+"---"+processDefinition.getKey());
         }
     }
 
@@ -81,7 +81,13 @@ public class ActivitiTest {
         System.out.println(pi.getId());
 
     }
-
+    @Test
+    public void test33(){
+        // 根据流程定义的key启动一个流程实例
+        String businessKey = "hello";
+        ProcessInstance processInstance = pe.getRuntimeService()
+                .startProcessInstanceByKey("qjlc", businessKey);
+    }
     @Test
     public void test4() {
         //查询指派人下的任务
