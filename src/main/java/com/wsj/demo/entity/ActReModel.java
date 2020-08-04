@@ -7,10 +7,10 @@ import java.io.Serializable;
  * (ActReModel)实体类
  *
  * @author makejava
- * @since 2020-07-22 13:54:02
+ * @since 2020-07-31 10:08:55
  */
 public class ActReModel implements Serializable {
-    private static final long serialVersionUID = 174557114348218770L;
+    private static final long serialVersionUID = 399333826242832890L;
     
     private Object id_;
     

@@ -112,7 +112,26 @@ public class ActivitiTest {
         pe.getTaskService().complete(taskId);
     }
     @Test
+    public void delTask() {
+        //执行任务 //运行中的无法删除，回报错。。。。
+        String taskId = "5002";
+        pe.getTaskService().deleteTask(taskId);
+    }
+    @Test
+    public void stopTask() {
+        //终止流程
+        String processId = "10001";
+        String deleteReason = "手动终止";//原因
+        //终止流程
+        pe.getRuntimeService().deleteProcessInstance(processId,deleteReason);
+//        //激活
+//        pe.getRuntimeService().activateProcessInstanceById(processId);
+//        //挂起
+//        pe.getRuntimeService().suspendProcessInstanceById(processId);
+    }
+    @Test
     public void testHistoric01(){
+        //历史记录
         HistoryService historyService = pe.getHistoryService();
         HistoricActivityInstanceQuery query = historyService.createHistoricActivityInstanceQuery();
 //        query.processInstanceId("2501");可以根据id筛选。。
@@ -127,6 +146,7 @@ public class ActivitiTest {
     }
     @Test
     public void deleteDeployment() {
+        //删除流程
         // 流程部署id
         String deploymentId = "1";
         // 通过流程引擎获取repositoryService
