@@ -3,11 +3,20 @@
   <process id="zhuliucheng" isClosed="false" isExecutable="true" processType="None">
     <startEvent id="_15" name="StartEvent"/>
     <userTask activiti:exclusive="true" id="_10" name="主流程任务"/>
-    <sequenceFlow id="_19" sourceRef="_15" targetRef="_10"/>
-    <callActivity activiti:exclusive="true" calledElement="ziliucheng" id="_21" name="CallActivityTask"/>
+    <callActivity activiti:exclusive="true" calledElement="${call}" id="_21" name="CallActivityTask">
+      <extensionElements>
+        <activiti:in source="wsj" sourceExpression="wsjwsj" target="2wsj" targetExpression="22wsjwsj"/>
+        <activiti:out source="3wsj" sourceExpression="33wsj" target="4wsj" targetExpression="44wsj"/>
+        <activiti:out/>
+        <activiti:out/>
+        <activiti:out/>
+        <activiti:out/>
+      </extensionElements>
+    </callActivity>
     <endEvent id="_8" name="EndEvent"/>
-    <sequenceFlow id="_12" sourceRef="_21" targetRef="_8"/>
-    <sequenceFlow id="_30" sourceRef="_10" targetRef="_21"/>
+    <sequenceFlow id="_2" sourceRef="_15" targetRef="_21"/>
+    <sequenceFlow id="_3" sourceRef="_21" targetRef="_10"/>
+    <sequenceFlow id="_4" sourceRef="_10" targetRef="_8"/>
   </process>
   <bpmndi:BPMNDiagram documentation="background=#3C3F41;count=1;horizontalcount=1;orientation=0;width=842.4;height=1195.2;imageableWidth=832.4;imageableHeight=1185.2;imageableX=5.0;imageableY=5.0" id="Diagram-_1" name="New Diagram">
     <bpmndi:BPMNPlane bpmnElement="zhuliucheng">
@@ -18,13 +27,13 @@
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_10" id="Shape-_10">
-        <omgdc:Bounds height="55.0" width="85.0" x="155.0" y="140.0"/>
+        <omgdc:Bounds height="55.0" width="85.0" x="355.0" y="150.0"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNShape bpmnElement="_21" id="Shape-_21" isExpanded="false">
-        <omgdc:Bounds height="55.0" width="85.0" x="345.0" y="145.0"/>
+        <omgdc:Bounds height="55.0" width="85.0" x="190.0" y="85.0"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="55.0" width="85.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
@@ -35,23 +44,23 @@
           <omgdc:Bounds height="32.0" width="32.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNShape>
-      <bpmndi:BPMNEdge bpmnElement="_12" id="BPMNEdge__12" sourceElement="_21" targetElement="_8">
-        <omgdi:waypoint x="430.0" y="172.5"/>
-        <omgdi:waypoint x="575.0" y="171.0"/>
-        <bpmndi:BPMNLabel>
-          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
-        </bpmndi:BPMNLabel>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_19" id="BPMNEdge__19" sourceElement="_15" targetElement="_10">
+      <bpmndi:BPMNEdge bpmnElement="_2" id="BPMNEdge__2" sourceElement="_15" targetElement="_21">
         <omgdi:waypoint x="72.0" y="171.0"/>
-        <omgdi:waypoint x="155.0" y="167.5"/>
+        <omgdi:waypoint x="190.0" y="112.5"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>
       </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="_30" id="BPMNEdge__30" sourceElement="_10" targetElement="_21">
-        <omgdi:waypoint x="240.0" y="167.5"/>
-        <omgdi:waypoint x="345.0" y="172.5"/>
+      <bpmndi:BPMNEdge bpmnElement="_3" id="BPMNEdge__3" sourceElement="_21" targetElement="_10">
+        <omgdi:waypoint x="275.0" y="112.5"/>
+        <omgdi:waypoint x="355.0" y="177.5"/>
+        <bpmndi:BPMNLabel>
+          <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="_4" id="BPMNEdge__4" sourceElement="_10" targetElement="_8">
+        <omgdi:waypoint x="440.0" y="177.5"/>
+        <omgdi:waypoint x="575.0" y="171.0"/>
         <bpmndi:BPMNLabel>
           <omgdc:Bounds height="0.0" width="0.0" x="0.0" y="0.0"/>
         </bpmndi:BPMNLabel>

@@ -13,7 +13,7 @@ import java.util.List;
  * @ClassName ActivitiConfig
  * @Description: TODO
  * @Author wsj
- * @Date 2020/6/30
+ * @Date 2020/8/19
  **/
 @Component
 public class ActivitiConfig implements ProcessEngineConfigurationConfigurer {

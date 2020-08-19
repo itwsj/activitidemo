@@ -29,5 +29,19 @@
          <property name="jdbcPassword" value="root" />-->
         <!--代表是否生成表结构-->
         <property name="databaseSchemaUpdate" value="true"/>
+        <property name="customPreCommandInterceptors">
+            <list>
+                <bean class="com.wsj.demo.controller.MyCommandInterceptorC"></bean>
+                <bean class="com.wsj.demo.controller.MyCommandInterceptorB"></bean>
+                <bean class="com.wsj.demo.controller.MyCommandInterceptorA"></bean>
+            </list>
+        </property>
+        <property name="eventListeners">
+            <list>
+                <!-- 配置上监听器 -->
+                <bean class="testssss.WsjActivitiEventListener"/>
+            </list>
+        </property>
     </bean>
+    <bean class="testssss.ActivitiConfig"/>
 </beans>

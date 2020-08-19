@@ -7,13 +7,17 @@ import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.engine.repository.ProcessDefinitionQuery;
+import org.activiti.engine.runtime.Execution;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.runtime.ProcessInstanceQuery;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 public class ActivitiTest {
@@ -52,15 +56,15 @@ public class ActivitiTest {
     public void test1() {
         //部署流程，把画好的流程部署到数据库
         DeploymentBuilder deploymentBuilder = pe.getRepositoryService().createDeployment();
-        deploymentBuilder.addClasspathResource("diagram/pro1.bpmn");
-        deploymentBuilder.addClasspathResource("diagram/pro1.png");
+        deploymentBuilder.addClasspathResource("diagram/callbpmn.bpmn");
+        deploymentBuilder.addClasspathResource("diagram/callbpmn.png");
         Deployment deployment = deploymentBuilder.deploy();
         System.out.println(deployment.getId());
     }
 
     @Test
     public void test2() {
-        // 部署查询对象----查询部署表act_re_deployment，也就是流程列表。。
+        // 部署查询对象----查询部署表act_re_deployment，也就是流程定义列表。。
         ProcessDefinitionQuery query = pe.getRepositoryService()
                 .createProcessDefinitionQuery();
 //        query.orderByDeploymenTime().desc();
@@ -70,29 +74,39 @@ public class ActivitiTest {
 
             System.out.println(processDefinition.getId()+"-------"+processDefinition.getName()+"---"+processDefinition.getKey());
         }
+
+//        qjlc:1:17504-------请假流程---qjlc
+//        zhuliucheng:3:132504-------null---zhuliucheng
+//        zhuliuchenge:1:135004-------null---zhuliuchenge
+//        ziliucheng:2:42504-------null---ziliucheng
+//        ziliuchenge:2:45004-------null---ziliuchenge
+//        ziliuchengs:2:47504-------null---ziliuchengs
     }
+
 
     @Test
     public void test3() {
-        //开启流程
-        String processDefinitionId = "qjlc:1:4";
-        ProcessInstance pi = pe.getRuntimeService().startProcessInstanceById(processDefinitionId);
-//        ProcessInstance pi = pe.getRuntimeService().startProcessInstanceByKey(); //多种方式请求
-        System.out.println(pi.getId());
+
+            //开启流程
+            String processDefinitionId = "zhuliuchenge";
+            Map<String,Object> map = new HashMap<String,Object>();
+            map.put("call","ziliucheng");
+            map.put("calle","ziliuchenge");
+            map.put("calls","ziliuchengs");
+
+//        ProcessInstance pi = pe.getRuntimeService().startProcessInstanceById(processDefinitionId);
+            ProcessInstance pi = pe.getRuntimeService().startProcessInstanceByKey(processDefinitionId,map);
+//        ProcessInstance pi = pe.getRuntimeService().startProcessInstanceByKey(processDefinitionId); //多种方式请求
+//        ProcessInstance pi  =  pe.getRuntimeService().startProcessInstanceById(processDefinitionId,m);
+            System.out.println(pi.getId()+"--"+pi.getProcessDefinitionId()+"--"+pi.getName()+"---"+pi.getStartUserId());
 
     }
-    @Test
-    public void test33(){
-        // 根据流程定义的key启动一个流程实例
-        String businessKey = "hello";
-        ProcessInstance processInstance = pe.getRuntimeService()
-                .startProcessInstanceByKey("qjlc", businessKey);
-    }
+
     @Test
     public void test4() {
         //查询指派人下的任务
         TaskQuery taskQuery = pe.getTaskService().createTaskQuery();
-//        String assignee = "张三";  指定人就是当前人下的任务，不指定人就是所有任务
+//        String assignee = "张三";  //指定人就是当前人下的任务，不指定人就是所有任务
 //        taskQuery.taskAssignee(assignee);
 
         taskQuery.orderByTaskCreateTime().desc();
@@ -104,18 +118,58 @@ public class ActivitiTest {
             System.out.println(id + "---" + name + "----" + assignee2);
         }
     }
-
     @Test
     public void test5() {
+        Map<String,Object> map = new HashMap<String,Object>();
+        map.put("call","ziliucheng");
         //执行任务
-        String taskId = "5002";
-        pe.getTaskService().complete(taskId);
+        String taskId = "160003";
+        pe.getTaskService().complete(taskId,map);
+//        pe.getTaskService().complete(taskId);
+//        pe.getRuntimeService().add
+
+
+    }
+    @Test
+    public void saveTask(){
+        Task task = pe.getTaskService().newTask("11222");
+        task.setAssignee("张三");
+        task.setName("审核");
+        pe.getTaskService().saveTask(task);
+        System.out.println(task.getId()+"------"+task.getAssignee());
+    }
+    @Test
+    public void getvar(){
+        Map<String, Object> variables = pe.getTaskService().getVariables("47508");
+        System.out.println(variables);
+        ProcessInstanceQuery processInstanceQuery = pe.getRuntimeService().createProcessInstanceQuery().includeProcessVariables();
     }
     @Test
     public void delTask() {
         //执行任务 //运行中的无法删除，回报错。。。。
         String taskId = "5002";
         pe.getTaskService().deleteTask(taskId);
+    }
+
+    @Test
+    public void queryProcessInstance() {
+        //查询流程定义数据
+        // 流程定义key
+        String processDefinitionKey = "qjlc";
+        // 获取RunTimeService
+        RuntimeService runtimeService = pe.getRuntimeService();
+        List<ProcessInstance> list = runtimeService.createProcessInstanceQuery()
+                .processDefinitionKey(processDefinitionKey).list();
+        for (ProcessInstance processInstance : list) {
+            System.out.println("----------------------------");
+//            System.out.println("流程实例id：" + processInstance.);
+            System.out.println("流程实例id：" + processInstance.getProcessInstanceId());
+            System.out.println("所属流程定义id：" + processInstance.getProcessDefinitionId());
+            System.out.println("是否执行完成：" + processInstance.isEnded());
+            System.out.println("是否暂停：" + processInstance.isSuspended());
+            System.out.println("当前活动标识：" + processInstance.getActivityId());
+        }
+
     }
     @Test
     public void stopTask() {
@@ -145,6 +199,13 @@ public class ActivitiTest {
         }
     }
     @Test
+    public void unfinish(){
+        HistoricActivityInstance historicActivityInstance = pe.getHistoryService().createHistoricActivityInstanceQuery()
+                .processInstanceId("22501")
+                .unfinished()//未完成的活动(任务)
+                .singleResult();
+    }
+    @Test
     public void deleteDeployment() {
         //删除流程
         // 流程部署id
@@ -155,5 +216,123 @@ public class ActivitiTest {
         repositoryService.deleteDeployment(deploymentId);
         //设置true 级联删除流程定义，即使该流程有流程实例启动也可以删除，设置为false非级别删除方式，如果流程
         // repositoryService.deleteDeployment(deploymentId, true);
+    }
+
+    @Test
+    public void suspendOrActivateProcessDefinition() {
+        // 挂起激活流程定义--全部流程实例
+        String processDefinitionId = "qjlc";
+        RepositoryService repositoryService = pe.getRepositoryService();
+        // 获得流程定义
+        ProcessDefinition processDefinition = repositoryService .createProcessDefinitionQuery()
+                .processDefinitionId(processDefinitionId).singleResult();
+        //是否暂停
+        boolean suspend = processDefinition.isSuspended();
+        if(suspend){
+            //如果暂停则激活，这里将流程定义下的所有流程实例全部激活
+            repositoryService.activateProcessDefinitionById(processDefinitionId, true, null);
+            System.out.println("流程定义："+processDefinitionId+"激活");
+        }else{
+            //如果激活则挂起，这里将流程定义下的所有流程实例全部挂起
+            repositoryService.suspendProcessDefinitionById(processDefinitionId, true, null);
+            System.out.println("流程定义："+processDefinitionId+"挂起");
+        }
+    }
+
+    @Test
+    public void suspendOrActiveProcessInstance() {
+        // 流程实例id
+        String processInstanceId = "";
+        // 获取RunTimeService
+        RuntimeService runtimeService = pe.getRuntimeService();
+        //根据流程实例id查询流程实例
+        ProcessInstance processInstance = runtimeService.createProcessInstanceQuery()
+                .processInstanceId(processInstanceId).singleResult();
+        boolean suspend = processInstance.isSuspended();
+        if(suspend){
+            //如果暂停则激活
+            runtimeService.activateProcessInstanceById(processInstanceId);
+            System.out.println("流程实例："+processInstanceId+"激活");
+        }else{
+            //如果激活则挂起
+            runtimeService.suspendProcessInstanceById(processInstanceId);
+            System.out.println("流程实例："+processInstanceId+"挂起");
+        }
+    }
+
+    @Test
+    public void setAssi() {
+        //设置执行人
+       pe.getTaskService().setAssignee("taskid","userId");
+
+    }
+    @Test
+    public void claimTask(){
+        TaskService taskService = pe.getTaskService();
+        //要拾取的任务id
+        String taskId = "15002";
+        //任务候选人id
+        String userId = "zhangsan";
+        //拾取任务
+        // 即使该用户不是候选人也能拾取(建议拾取时校验是否有资格)
+        // 校验该用户有没有拾取任务的资格
+        Task task = taskService.createTaskQuery().taskId(taskId)
+                .taskCandidateUser(userId)//根据候选人查询
+                .singleResult();
+        if(task!=null){
+            taskService.claim(taskId, userId);
+            System.out.println("任务拾取成功");
+        }
+    }
+    // 归还组任务，由个人任务变为组任务，还可以进行任务交接
+    @Test
+    public void setAssigneeToGroupTask() {
+        // 查询任务使用
+        TaskService taskService = pe.getTaskService();
+        // 当前待办任务
+        String taskId = "15002";
+        // 任务负责人
+        String userId = "zhangsan";
+        // 校验userId是否是taskId的负责人，如果是负责人才可以归还组任务
+        Task task = taskService.createTaskQuery().taskId(taskId)
+                .taskAssignee(userId).singleResult();
+        if (task != null) {
+            // 如果设置为null，归还组任务,该 任务没有负责人
+            taskService.setAssignee(taskId, null);
+        }
+    }
+
+    @Test
+    public void test333() {
+        //开启流程
+        String processDefinitionId = "qjlc:1:4";
+        String variables = "流程变量";
+        Map m = new HashMap();
+        m.put("variables",variables);
+        //在任务中设置流程变量
+        pe.getTaskService().setVariables("taskid",m);
+
+    }
+    @Test
+    public void test3333() {
+        //开启流程
+        String processDefinitionId = "qjlc:1:4";
+        String variables = "流程变量";
+        Map m = new HashMap();
+        m.put("variables",variables);
+        //在任务中设置流程变量
+        pe.getRuntimeService().setVariables("executionID",m);
+
+    }
+    @Test
+    public void test33(){
+        // 根据流程定义的key启动一个流程实例
+        String businessKey = "hello";
+        ProcessInstance processInstance = pe.getRuntimeService()
+                .startProcessInstanceByKey("qjlc", businessKey);
+
+        //获取businessKey
+        String businessKey1 = processInstance.getBusinessKey();
+        System.out.println(businessKey1);
     }
 }
