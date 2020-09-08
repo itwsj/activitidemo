@@ -56,8 +56,8 @@ public class ActivitiTest {
     public void test1() {
         //部署流程，把画好的流程部署到数据库
         DeploymentBuilder deploymentBuilder = pe.getRepositoryService().createDeployment();
-        deploymentBuilder.addClasspathResource("diagram/callbpmn.bpmn");
-        deploymentBuilder.addClasspathResource("diagram/callbpmn.png");
+        deploymentBuilder.addClasspathResource("diagram/pro1.bpmn");
+        deploymentBuilder.addClasspathResource("diagram/pro1.png");
         Deployment deployment = deploymentBuilder.deploy();
         System.out.println(deployment.getId());
     }
@@ -75,12 +75,6 @@ public class ActivitiTest {
             System.out.println(processDefinition.getId()+"-------"+processDefinition.getName()+"---"+processDefinition.getKey());
         }
 
-//        qjlc:1:17504-------请假流程---qjlc
-//        zhuliucheng:3:132504-------null---zhuliucheng
-//        zhuliuchenge:1:135004-------null---zhuliuchenge
-//        ziliucheng:2:42504-------null---ziliucheng
-//        ziliuchenge:2:45004-------null---ziliuchenge
-//        ziliuchengs:2:47504-------null---ziliuchengs
     }
 
 
@@ -88,15 +82,13 @@ public class ActivitiTest {
     public void test3() {
 
             //开启流程
-            String processDefinitionId = "zhuliuchenge";
-            Map<String,Object> map = new HashMap<String,Object>();
-            map.put("call","ziliucheng");
-            map.put("calle","ziliuchenge");
-            map.put("calls","ziliuchengs");
+            String processDefinitionId = "qjlc";
+//            Map<String,Object> map = new HashMap<String,Object>();
+//            map.put("call","ziliucheng");
 
 //        ProcessInstance pi = pe.getRuntimeService().startProcessInstanceById(processDefinitionId);
-            ProcessInstance pi = pe.getRuntimeService().startProcessInstanceByKey(processDefinitionId,map);
-//        ProcessInstance pi = pe.getRuntimeService().startProcessInstanceByKey(processDefinitionId); //多种方式请求
+//            ProcessInstance pi = pe.getRuntimeService().startProcessInstanceByKey(processDefinitionId,map);
+        ProcessInstance pi = pe.getRuntimeService().startProcessInstanceByKey(processDefinitionId); //多种方式请求
 //        ProcessInstance pi  =  pe.getRuntimeService().startProcessInstanceById(processDefinitionId,m);
             System.out.println(pi.getId()+"--"+pi.getProcessDefinitionId()+"--"+pi.getName()+"---"+pi.getStartUserId());
 
@@ -120,24 +112,36 @@ public class ActivitiTest {
     }
     @Test
     public void test5() {
-        Map<String,Object> map = new HashMap<String,Object>();
-        map.put("call","ziliucheng");
+//        Map<String,Object> map = new HashMap<String,Object>();
+//        map.put("call","ziliucheng");
         //执行任务
-        String taskId = "160003";
-        pe.getTaskService().complete(taskId,map);
-//        pe.getTaskService().complete(taskId);
+        String taskId = "15001";
+//        pe.getTaskService().complete(taskId,map);
+        pe.getTaskService().complete(taskId);
 //        pe.getRuntimeService().add
 
 
     }
     @Test
     public void saveTask(){
-        Task task = pe.getTaskService().newTask("11222");
-        task.setAssignee("张三");
+        Task task = pe.getTaskService().newTask();
+        task.setAssignee("张三三");
         task.setName("审核");
+        task.setParentTaskId("12505");
+        task.setTenantId("1");
         pe.getTaskService().saveTask(task);
         System.out.println(task.getId()+"------"+task.getAssignee());
     }
+
+    @Test
+    public void subtask(){
+        List<Task> subTasks = pe.getTaskService().getSubTasks("12505");
+        for (Task t: subTasks) {
+            System.out.println(t.getId());
+        }
+//        pe.getHistoryService().
+    }
+
     @Test
     public void getvar(){
         Map<String, Object> variables = pe.getTaskService().getVariables("47508");
@@ -201,9 +205,17 @@ public class ActivitiTest {
     @Test
     public void unfinish(){
         HistoricActivityInstance historicActivityInstance = pe.getHistoryService().createHistoricActivityInstanceQuery()
-                .processInstanceId("22501")
+                .processInstanceId("12501")
                 .unfinished()//未完成的活动(任务)
                 .singleResult();
+        List<HistoricActivityInstance> list = pe.getHistoryService().createHistoricActivityInstanceQuery()
+                .processInstanceId("12501")
+                .unfinished()//未完成的活动(任务)
+                .list();
+        for (int i = 0; i <list.size() ; i++) {
+            System.out.println(list.get(i).getTaskId());
+        }
+
     }
     @Test
     public void deleteDeployment() {

@@ -11,6 +11,8 @@
         <activiti:out/>
         <activiti:out/>
         <activiti:out/>
+        <activiti:in source="wsj" sourceExpression="wsje" target="wsjt" targetExpression="wsjte"/>
+        <activiti:out source="wsjo" sourceExpression="wsjoe" target="wsjot" targetExpression="wsjote"/>
       </extensionElements>
     </callActivity>
     <endEvent id="_8" name="EndEvent"/>
